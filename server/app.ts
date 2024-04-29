@@ -10,6 +10,7 @@ import { PrismaClient } from '@prisma/client'
 
 // Routes
 import authRouter from './routes/auth'
+import appraisalRouter from './routes/appraisal'
 
 const app = express()
 const server = createServer(app)
@@ -115,7 +116,7 @@ app.get('/messages', async (req, res) => {
 })
 
 app.get('/rooms', async (req, res) => {
-  const senderId = 1
+  const senderId = parseInt(req.query.id, 10)
   const conversationIds = await prisma.participant
     .findMany({
       where: { userId: senderId },
@@ -164,6 +165,7 @@ app.get('/rooms', async (req, res) => {
 })
 
 app.use(authRouter)
+app.use(appraisalRouter)
 
 server.listen(3000, () =>
   console.log(`

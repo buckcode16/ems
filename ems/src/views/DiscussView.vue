@@ -1,5 +1,6 @@
 <template>
   <vue-advanced-chat
+    v-if="authStore.isAuthenticated"
     :current-user-id="currentUserId"
     :rooms="rooms"
     :messages="messages"
@@ -10,10 +11,15 @@
     @fetch-messages="fetchMessages($event.detail)"
     :height="chatHeight + 'px'"
   />
+  <div class="flex justify-center items-center p-4" v-else>
+    <p class="text-xl p-4 border rounded-md shadow border-gray">
+      Please log in
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import axios from 'axios'
 
 import { io } from 'socket.io-client'
@@ -27,8 +33,10 @@ const socket = io('http://localhost:3000', {
 })
 
 import { register } from 'vue-advanced-chat'
+import useAuthStore from '@/stores/auth'
 
-const currentUserId = ref(1)
+const authStore = useAuthStore()
+const currentUserId = computed(() => authStore.user.id)
 const rooms = ref(null)
 const allMessages = ref(null)
 const messages = ref([])
@@ -78,43 +86,51 @@ const fetchMessages = (event) => {
 }
 
 const initVueChat = () => {
-  // fetch messages
-  axios
-    .get('http://localhost:3000/messages')
-    .then(function (response) {
-      // handle success
-      console.log('from Init messages', response.data.messages)
-      const toString = response.data.messages.map(({ senderId, ...rest }) => ({
-        senderId: senderId.toString(),
-        ...rest,
-      }))
-      allMessages.value = toString
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error)
-    })
-    .finally(function () {
-      // always executed
-    })
+  if (authStore.isAuthenticated) {
+    // fetch messages
+    axios
+      .get('http://localhost:3000/messages')
+      .then(function (response) {
+        // handle success
+        console.log('from Init messages', response.data.messages)
+        const toString = response.data.messages.map(
+          ({ senderId, ...rest }) => ({
+            senderId: senderId.toString(),
+            ...rest,
+          }),
+        )
+        allMessages.value = toString
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error)
+      })
+      .finally(function () {
+        // always executed
+      })
 
-  // fetch rooms
-  axios
-    .get('http://localhost:3000/rooms')
-    .then(function (response) {
-      // handle success
-      console.log('from Init rooms', response)
-      rooms.value = response.data
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error)
-    })
-    .finally(function () {
-      // always executed
-    })
+    // fetch rooms
+    axios
+      .get('http://localhost:3000/rooms', {
+        params: {
+          id: authStore.user.id,
+        },
+      })
+      .then(function (response) {
+        // handle success
+        console.log('from Init rooms', response)
+        rooms.value = response.data
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error)
+      })
+      .finally(function () {
+        // always executed
+      })
 
-  register()
+    register()
+  }
 }
 
 const chatHeight = ref(window.innerHeight * 0.85)

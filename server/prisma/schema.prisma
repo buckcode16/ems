@@ -24,6 +24,9 @@ model User {
   lastOnline DateTime
   participants Participant[]
   messages Message[]
+  department Department?  
+  employeeAppraisals Appraisal[] @relation("EmployeeAppraisal")
+  managerAppraisals Appraisal[] @relation("ManagerAppraisal")
 }
 
 model Conversation {
@@ -71,6 +74,35 @@ model Attachment {
   fileType String
 }
 
+model Appraisal {
+  id Int @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime
+  employee User @relation("EmployeeAppraisal", fields: [employeeId], references: [id])
+  employeeId Int
+  manager User @relation("ManagerAppraisal",fields: [managerId], references: [id])
+  managerId Int
+  appraisal_start DateTime
+  appraisal_end DateTime
+  emp_1 String
+  emp_2 String
+  emp_3 String
+  emp_4 String
+  emp_5 String
+  emp_6 String
+  emp_date DateTime
+  mgr_1 String
+  mgr_2_stress Int
+  mgr_2_time Int
+  mgr_2_teamwork Int
+  mgr_2_autonomy Int
+  mgr_2_proactive Int
+  mgr_3 String
+  mgr_4 String
+  mgr_5 String
+  mgr_date DateTime
+}
+
 enum MessageType {
   TEXT
   IMAGE
@@ -78,4 +110,15 @@ enum MessageType {
   POLL
   FILE
   VIDEO
+}
+
+enum Department {
+  ADMINISTRATION
+  HUMAN_RESOURCES
+  IT
+  FINANCE
+  MARKETING
+  SALES
+  LEGAL
+  RESEARCH_AND_DEVELOPMENT
 }

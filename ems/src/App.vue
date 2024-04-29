@@ -6,11 +6,7 @@
           <div class="flex items-center">
             <!-- Logo -->
             <div class="flex-shrink-0">
-              <img
-                class="h-8 w-8"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                alt="Your Company"
-              />
+              <img class="h-8 w-8" :src="logo" alt="Your Company" />
             </div>
             <!-- END Logo -->
 
@@ -37,7 +33,11 @@
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
               <!-- Profile dropdown -->
-              <Menu as="div" class="relative ml-3">
+              <Menu
+                v-if="authStore.isAuthenticated"
+                as="div"
+                class="relative ml-3"
+              >
                 <div>
                   <MenuButton
                     class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -46,7 +46,7 @@
                     <span class="sr-only">Open user menu</span>
                     <img
                       class="h-8 w-8 rounded-full"
-                      :src="user.imageUrl"
+                      :src="user.profilePic"
                       alt=""
                     />
                   </MenuButton>
@@ -82,6 +82,15 @@
               </Menu>
               <!-- END Profile dropdown -->
 
+              <div v-else class="text-white flex gap-4">
+                <router-link to="/login">
+                  Sign in
+                </router-link>
+                <router-link to="/register">
+                  Register
+                </router-link>
+              </div>
+
               <button
                 @click="handleSignOut"
                 v-if="authStore.isAuthenticated"
@@ -107,7 +116,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useRoute, RouterLink, RouterView } from 'vue-router'
+import { useRouter, RouterLink, RouterView } from 'vue-router'
 import {
   Disclosure,
   Menu,
@@ -118,16 +127,21 @@ import {
 
 import useAuthStore from '@/stores/auth'
 
+import logo from '@/assets/5881.png'
 const authStore = useAuthStore()
 
-const route = useRoute()
+const router = useRouter()
 
-const user = {
-  name: 'Tom Cook',
-  email: 'tom@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+const user = computed(() => {
+  return {
+    name: authStore.user.username,
+    email: authStore.user.email,
+    profilePic:
+      authStore.user.profilePic ??
+      'https://images.unsplash.com/photo-1534294668821-28a3054f4256?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  }
+})
+
 const navigation = [
   { name: 'Dashboard', href: '/', current: true },
   // { name: 'Calendar', href: '/calendars', current: false },
@@ -138,11 +152,10 @@ const navigation = [
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
-  { name: 'Sign in', href: 'login' },
-  { name: 'Register', href: 'register' },
 ]
 
 function handleSignOut() {
   authStore.$reset()
+  router.push('/')
 }
 </script>

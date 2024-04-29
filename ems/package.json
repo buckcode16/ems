@@ -14,11 +14,14 @@
     "@headlessui/vue": "^1.7.19",
     "@vee-validate/yup": "^4.12.6",
     "axios": "^1.6.8",
+    "flowbite": "^2.3.0",
+    "flowbite-datepicker": "^1.2.6",
     "pinia": "^2.1.7",
     "socket.io-client": "^4.7.5",
     "vee-validate": "^4.12.6",
     "vue": "^3.4.21",
     "vue-advanced-chat": "^2.0.11",
+    "vue-chart-3": "^3.1.8",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

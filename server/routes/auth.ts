@@ -36,14 +36,12 @@ router.post('/api/auth/login', async function (req, res, next) {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    console.log(user)
-
     const isPasswordValid = bcrypt.compareSync(password, user.passwordHash)
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    const token = GetToken(req.body)
+    const token = GetToken(user)
 
     res
       .status(200)

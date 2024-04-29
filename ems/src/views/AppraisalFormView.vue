@@ -35,13 +35,22 @@
       </div>
       <!-- Department -->
       <div><p>Department</p></div>
-      <!-- Date -->
-      <div>
-        <p>Appraisal Date</p>
-        <input
-          type="date"
-          class="mt-1 block rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-        />
+      <div class="grid grid-cols-2 gap-4 my-4">
+        <!-- Date -->
+        <div>
+          <p>Appraisal Date Start</p>
+          <input
+            type="date"
+            class="mt-1 block rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
+        </div>
+        <div>
+          <p>Appraisal Date End</p>
+          <input
+            type="date"
+            class="mt-1 block rounded-md border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
+        </div>
       </div>
     </div>
 
@@ -51,7 +60,13 @@
       <div class="grid grid-cols-2 border rounded-md border-gray-300 my-4">
         <!-- Employee's Feedback -->
         <div class="m-4 feedback-section border-r">
-          <h1>Employee's Feedback</h1>
+          <div class="grid grid-cols-2 gap-4 my-4">
+            <h1>Employee's Feedback</h1>
+            <p>
+              Completion Date
+              <span class="pl-4">12-12-1212</span>
+            </p>
+          </div>
           <h2>My work</h2>
           <h3>What are my best achievement(s) since my last appraisal?</h3>
           <p>
@@ -125,7 +140,13 @@
         </div>
         <!-- Manager's Feedback -->
         <div class="m-4 feedback-section">
-          <h1>Manager's Feedback</h1>
+          <div class="grid grid-cols-2 gap-4 my-4">
+            <h1>Manager's Feedback</h1>
+            <p>
+              Completion Date
+              <span class="pl-4">12-12-1212</span>
+            </p>
+          </div>
           <h2>Feedback</h2>
           <h3>
             Give one positive achievement that convinced you of the employee's

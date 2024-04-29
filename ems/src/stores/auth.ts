@@ -5,6 +5,7 @@ const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = ref(false)
   const token = ref('')
   const user = ref({})
+  const userAppraisals = ref([])
 
   function $reset() {
     isAuthenticated.value = false
@@ -13,7 +14,7 @@ const useAuthStore = defineStore('auth', () => {
 
     localStorage.removeItem('token')
   }
-  return { isAuthenticated, token, user, $reset }
+  return { isAuthenticated, token, user, userAppraisals, $reset }
 })
 
 export default useAuthStore
