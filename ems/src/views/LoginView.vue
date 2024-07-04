@@ -86,8 +86,23 @@ const fetchUserForm = async () => {
     })
 
     authStore.userAppraisals = userFormResponse.data
+
+    fetchAllUsers()
   } catch (error) {
     console.error('Fetching user form failed:', error)
+  }
+}
+
+const fetchAllUsers = async () => {
+  try {
+    const users = await axios({
+      method: 'get',
+      url: 'http://localhost:3000/api/user',
+    })
+
+    authStore.users = users.data
+  } catch (error) {
+    console.error('Fetch all users failed', error)
   }
 }
 </script>

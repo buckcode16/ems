@@ -11,6 +11,7 @@ import { PrismaClient } from '@prisma/client'
 // Routes
 import authRouter from './routes/auth'
 import appraisalRouter from './routes/appraisal'
+import userRouter from './routes/user'
 
 const app = express()
 const server = createServer(app)
@@ -166,6 +167,7 @@ app.get('/rooms', async (req, res) => {
 
 app.use(authRouter)
 app.use(appraisalRouter)
+app.use(userRouter)
 
 server.listen(3000, () =>
   console.log(`

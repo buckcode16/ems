@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-scroll border rounded-lg border-gray-250">
+  <div class="overflow-scroll border rounded-lg border-gray-250 h-[500px]">
     <table class="min-w-full bg-white shadow-md rounded-lg">
       <thead>
         <tr class="bg-gray-800 text-white">
@@ -16,7 +16,9 @@
           v-for="user in users"
           class="border-b border-gray-200 hover:bg-gray-100"
         >
-          <td class="py-3 px-6 text-center">{{ user.profilePic }}</td>
+          <td class="py-3 px-6 text-center">
+            <img class="max-h-5" :src="user.profilePic" alt="" />
+          </td>
           <td class="py-3 px-6 text-left whitespace-nowrap">
             {{ user.username }}
           </td>
@@ -33,99 +35,41 @@
 </template>
 
 <script setup lang="ts">
-const users = [
-  {
-    username: 'a',
-    email: 'a',
-    profilePic: 'a',
-    lastOnline: 'a',
-    department: 'a',
-  },
-  {
-    username: 'b',
-    email: 'b',
-    profilePic: 'b',
-    lastOnline: 'b',
-    department: 'b',
-  },
-  {
-    username: 'c',
-    email: 'c',
-    profilePic: 'c',
-    lastOnline: 'c',
-    department: 'c',
-  },
-  {
-    username: 'd',
-    email: 'd',
-    profilePic: 'd',
-    lastOnline: 'd',
-    department: 'd',
-  },
-  {
-    username: 'a',
-    email: 'a',
-    profilePic: 'a',
-    lastOnline: 'a',
-    department: 'a',
-  },
-  {
-    username: 'b',
-    email: 'b',
-    profilePic: 'b',
-    lastOnline: 'b',
-    department: 'b',
-  },
-  {
-    username: 'c',
-    email: 'c',
-    profilePic: 'c',
-    lastOnline: 'c',
-    department: 'c',
-  },
-  {
-    username: 'd',
-    email: 'd',
-    profilePic: 'd',
-    lastOnline: 'd',
-    department: 'd',
-  },
-  {
-    username: 'a',
-    email: 'a',
-    profilePic: 'a',
-    lastOnline: 'a',
-    department: 'a',
-  },
-  {
-    username: 'b',
-    email: 'b',
-    profilePic: 'b',
-    lastOnline: 'b',
-    department: 'b',
-  },
-  {
-    username: 'c',
-    email: 'c',
-    profilePic: 'c',
-    lastOnline: 'c',
-    department: 'c',
-  },
-  {
-    username: 'd',
-    email: 'd',
-    profilePic: 'd',
-    lastOnline: 'd',
-    department: 'd',
-  },
-]
+import useAuthStore from '@/stores/auth'
+import { onMounted, ref } from 'vue'
+
+const authStore = useAuthStore()
+
+const users = ref([])
+
+const options = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+}
+
+onMounted(() => {
+  console.log('userList', authStore.users)
+
+  const formattedUsers = authStore.users.map((u) => ({
+    ...u,
+    lastOnline: new Date(u.lastOnline).toLocaleDateString('en-US', options),
+  }))
+
+  users.value = formattedUsers
+  console.log('users.value', users.value)
+})
 </script>
 
 <style scoped>
 th {
   position: sticky;
   top: 0;
-  background-color: #1f2937; /* Same as bg-gray-800 */
-  z-index: 10; /* Ensures the header is above other content when scrolling */
+  background-color: #1f2937;
+  z-index: 10;
 }
 </style>
